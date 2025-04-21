@@ -1,0 +1,48 @@
+# Python Virtual Environment
+venv/
+*.venv/
+.venv/
+
+# Compiled Python files
+*.pyc
+__pycache__/
+
+# Jupyter Notebook Checkpoints
+.ipynb_checkpoints/
+
+# Large Model Files & Checkpoints
+*.gguf
+*.safetensors
+*.bin
+mistral-qlora-adapter*/
+merged_mistral_adapter*/
+
+# Data Files (optional - keep if small and static, ignore if large/generated)
+data/
+*.yaml
+*.txt
+
+# OS-specific files
+.DS_Store
+
+# Environment variables
+.env
+
+# Ignore large model files, adapters, GGUF outputs
+models/
+
+# Ignore generated/downloaded data (if applicable)
+data/
+
+# Ignore environment variables file
+.env
+
+# Ignore macOS specific files
+.DS_Store
+
+# Ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Ignore other cache/temporary files if needed
+__pycache__/
+*.pyc
