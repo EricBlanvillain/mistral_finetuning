@@ -77,12 +77,16 @@ source venv/bin/activate # On macOS/Linux
     # Verify build by checking for executables like build/bin/llama-quantize
     ```
 
-**4. YouTube Data API Key (Optional but Recommended):**
+**4. YouTube Data API Key (Required for `scripts/fetch_channel_videos.py`)**
 
-The `youtube-transcript-api` library often works without an API key for public videos. However, for reliability or to access private/caption data, you might need a Google Cloud API key with the YouTube Data API v3 enabled.
+The `youtube-transcript-api` library (used by `scripts/data_gen.py`) often works without an API key for fetching transcripts of public videos listed in `videos.yaml`.
+
+However, if you want to use the `scripts/fetch_channel_videos.py` script to automatically generate the list of video IDs for a channel and populate `videos.yaml`, you **must** obtain a Google Cloud API key with the YouTube Data API v3 enabled.
 
 *   Follow Google's documentation to create an API key: [https://developers.google.com/youtube/v3/getting-started](https://developers.google.com/youtube/v3/getting-started)
-*   **Note:** The current `scripts/fetch_channel_videos.py` *doesn't* explicitly use an API key, relying on the library's default behavior. If you encounter fetching issues, you might need to modify the script to use `google-api-python-client` and your key.
+*   Place the key in your `.env` file as `YOUTUBE_API_KEY`.
+*   The `fetch_channel_videos.py` script needs modification to read this key from the environment and use it with the `google-api-python-client` library (which would need to be added to `requirements.txt`).
+*   **If you manually create/edit `videos.yaml`, you do not need this API key.**
 
 **5. Hugging Face Account & Token:**
 
@@ -97,7 +101,13 @@ You'll need a Hugging Face account to:
 
 **Step 1: Prepare Video List**
 
-Edit `videos.yaml` and add the YouTube video IDs or full URLs you want to process. Optionally run `scripts/fetch_channel_videos.py` first if you have a channel ID and API key configured.
+Manually edit `videos.yaml` and add the YouTube video IDs or full URLs you want to process.
+
+Alternatively, if you have configured `scripts/fetch_channel_videos.py` with your YouTube Data API key (see Setup Step 4), you can run it to automatically populate `videos.yaml` based on a channel ID:
+```bash
+# Example (assuming API key is configured in the script and .env)
+# python scripts/fetch_channel_videos.py --channel_id YOUR_CHANNEL_ID --output videos.yaml
+```
 
 **Step 2: Generate Training Data**
 
