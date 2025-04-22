@@ -76,7 +76,7 @@ def get_ram_usage():
 # --- Gradio Interface ---
 DEFAULT_SYSTEM_PROMPT = "You are a helpful assistant."
 
-def chat_stream(message: str, history: list, system_prompt: str, max_new_tokens: int = 256, temperature: float = 0.7, top_p: float = 0.9):
+def chat_stream(message: str, history: list, system_prompt: str, max_new_tokens: int = 512, temperature: float = 0.7, top_p: float = 0.9, repetition_penalty: float = 1.1):
     """Generates a response using the loaded CTransformers GGUF model (non-streaming)."""
     if not system_prompt:
         system_prompt = DEFAULT_SYSTEM_PROMPT
@@ -104,6 +104,8 @@ def chat_stream(message: str, history: list, system_prompt: str, max_new_tokens:
             temperature=temperature,
             top_p=top_p,
             stop=["</s>"], # Stop generation at the end-of-sequence token
+            repetition_penalty=repetition_penalty, # Add repetition penalty
+            min_length=32, # Add minimum length constraint
             # stream=False # Default is usually False
         )
         print(f"\\n--- Response ---\\n{response}\\n-----------\\n")
@@ -128,9 +130,10 @@ with gr.Blocks(theme=gr.themes.Base()) as demo:
         fn=chat_stream,
         additional_inputs=[
             gr.Textbox(label="System Prompt", value=DEFAULT_SYSTEM_PROMPT),
-            gr.Slider(minimum=32, maximum=1024, step=32, value=256, label="Max New Tokens"),
+            gr.Slider(minimum=32, maximum=1024, step=32, value=512, label="Max New Tokens"),
             gr.Slider(minimum=0.1, maximum=1.0, step=0.1, value=0.7, label="Temperature"),
             gr.Slider(minimum=0.1, maximum=1.0, step=0.1, value=0.9, label="Top-P"),
+            gr.Slider(minimum=1.0, maximum=1.5, step=0.05, value=1.1, label="Repetition Penalty")
         ],
         title="Mistral-7B GGUF Chat (ctransformers)",
         description="Enter your message and interact with the fine-tuned GGUF model.",
