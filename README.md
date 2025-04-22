@@ -43,7 +43,7 @@ This pipeline is designed to run the fine-tuning on a free Colab GPU (T4/A10) an
 **1. Clone the Repository:**
 
 ```bash
-git clone <your-repo-url>
+git clone EricBlanvillain/mistral_finetuning
 cd mistral_finetuning
 ```
 
